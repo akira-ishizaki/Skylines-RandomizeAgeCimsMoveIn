@@ -255,6 +255,18 @@ namespace RandomizeAgeCimsMoveIn
                             int age = Singleton<SimulationManager>.instance.m_randomizer.Int32(index >= 2 ? 0 : 90, index >= 2 ? 15 : 105) + age2;//変更
                             if (num1 == 1) age = Singleton<SimulationManager>.instance.m_randomizer.Int32(Citizen.AGE_LIMIT_TEEN, Citizen.AGE_LIMIT_ADULT - 15);//追加
                             Citizen.Education education2 = index >= 2 ? Citizen.Education.Uneducated : education1;
+                            if (ModInfo.ModConf.RandomizeEducationLevel)
+                            {
+                                Citizen randomCitizen = Singleton<CitizenManager>.instance.m_citizens.m_buffer[Singleton<MessageManager>.instance.GetRandomResidentID()];
+                                if (randomCitizen.m_instance != 0)
+                                {
+                                    education2 = Citizen.Education.Uneducated;
+                                    if (age >= Citizen.AGE_LIMIT_CHILD && randomCitizen.Education1) education2++;
+                                    if (age >= Citizen.AGE_LIMIT_TEEN && randomCitizen.Education2) education2++;
+                                    if (age >= Citizen.AGE_LIMIT_YOUNG && randomCitizen.Education3) education2++;
+                                }
+                            }
+
                             bool citizen2;
                             if (index == 1)
                             {
